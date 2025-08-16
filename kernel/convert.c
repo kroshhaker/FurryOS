@@ -36,7 +36,7 @@ unsigned long hex_to_dec_len(const char *hex, size_t len) {
 }
 
 char *i2s(int num, char *str) {
-    char temp[12]; // временный буфер (макс. для int)
+    char temp[12];
     int i = 0, j = 0;
     int negative = 0;
 
@@ -59,7 +59,6 @@ char *i2s(int num, char *str) {
     if (negative)
         temp[i++] = '-';
 
-    // Перевернуть temp → str
     while (i > 0)
         str[j++] = temp[--i];
 

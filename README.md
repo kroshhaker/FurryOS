@@ -40,5 +40,14 @@ lsblk
 fdisk /dev/loopX  # Замените X на ваш номер устройства
 ```
 
+### Установка Grub 2
+```bash
+sudo grub-install --target=i386-pc --boot-directory=/mnt/boot /dev/loopX
+echo "menuentry 'FurryOS' {" > /mnt/boot/grub/grub.cfg
+echo "    set root='hd0,msdos1'" > /mnt/boot/grub/grub.cfg
+echo "    multiboot /kernel-001" > /mnt/boot/grub/grub.cfg
+echo "}" > /mnt/boot/grub/grub.cfg
+```
+
 ## Файловая система
 Проект следует стандарту FHS (Filesystem Hierarchy Standard). Готовый образ файловой системы доступен в файле `furryos.tar.xz`.

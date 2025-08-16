@@ -64,20 +64,13 @@ void kernel_main(unsigned int magic) {
     print_colored("=====================================\n", LIGHT_CYAN | (BLACK << 4));
     print_colored("         Welcome to Furry OS       \n", WHITE | (BLACK << 4));
     print_colored("=====================================\n", LIGHT_CYAN | (BLACK << 4));
-    print("Version: 2.0 (GRUB)\n");
     
     if (magic != MULTIBOOT_BOOTLOADER_MAGIC) {
     print_colored("ERROR: Invalid multiboot magic number!\n", LIGHT_RED | (BLACK << 4));
     return;
 }
 
-print_colored("Multiboot loader detected\n", LIGHT_GREEN | (BLACK << 4));
-print_colored("Protected mode is active\n", LIGHT_GREEN | (BLACK << 4));
-print_colored("VGA text mode initialized\n", LIGHT_GREEN | (BLACK << 4));
-print_colored("Keyboard is ready\n", LIGHT_GREEN | (BLACK << 4));
-
-print("\nType 'help' for a list of commands\n");
-print("Type 'sysinfo' for system information\n\n");
+print("\nType 'help' for a list of commands\n\n");
     
     shell();
 }

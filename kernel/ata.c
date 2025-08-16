@@ -34,8 +34,6 @@ void ata_read_sector(uint32_t lba, uint8_t *buffer) {
         return;
     }
 
-
-    // Читаем 256 слов (512 байт)
     for (int i = 0; i < 256; i++) {
         uint16_t data = inw(ATA_REG_DATA);
         buffer[i*2]   = data & 0xFF;
@@ -53,19 +51,15 @@ void ata_read_sectors(uint32_t lba, uint8_t sector_count, uint8_t *buffer) {
         return;
     }
 
-    // Устанавливаем количество секторов
     outb(ATA_REG_SECCOUNT0, sector_count);
 
-    // Устанавливаем LBA
     outb(ATA_REG_LBA0, (uint8_t)(lba & 0xFF));
     outb(ATA_REG_LBA1, (uint8_t)((lba >> 8) & 0xFF));
     outb(ATA_REG_LBA2, (uint8_t)((lba >> 16) & 0xFF));
-    outb(ATA_REG_HDDEVSEL, 0xE0 | ((lba >> 24) & 0x0F)); // master device, LBA mode
+    outb(ATA_REG_HDDEVSEL, 0xE0 | ((lba >> 24) & 0x0F));
 
-    // Команда чтения
     outb(ATA_REG_COMMAND, ATA_CMD_READ_SECTORS);
 
-    // Читаем все сектора
     for (uint8_t s = 0; s < sector_count; s++) {
         timeout = 1000000;
         while (!(inb(0x1F7) & ATA_SR_DRQ) && timeout--);
