@@ -1,19 +1,23 @@
 [BITS 32]
 
-MULTIBOOT_MAGIC     equ 0x1BADB002
-MULTIBOOT_FLAGS     equ 0x00000003
-MULTIBOOT_CHECKSUM  equ -(MULTIBOOT_MAGIC + MULTIBOOT_FLAGS)
-
 section .multiboot
-align 4
-    dd MULTIBOOT_MAGIC
-    dd MULTIBOOT_FLAGS  
-    dd MULTIBOOT_CHECKSUM
+align 8
+    dd 0xe85250d6
+    dd 0
+    dd header_end - header_start  
+    dd 0x100000000 - (0xe85250d6 + 0 + (header_end - header_start))
+
+header_start:
+    dw 0
+    dw 0
+    dd 8
+
+header_end:
 
 section .bss
 align 16
 stack_bottom:
-    resb 16384  ; 16 KiB stack
+    resb 16384
 stack_top:
 
 section .text
@@ -23,7 +27,6 @@ extern kernel_main
 _start:
     mov esp, stack_top
 
-    ; передаём multiboot magic и указатель на info (GRUB уже ставит)
     push ebx
     push eax
     call kernel_main

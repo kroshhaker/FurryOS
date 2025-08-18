@@ -4,6 +4,8 @@ LD = ld
 
 CFLAGS = -ffreestanding -fno-builtin -nostdlib -nostdinc \
          -fno-stack-protector -m32 -Iinclude -Ikernel -Iboot
+CFLAGS_DEBUG = -ffreestanding -fno-builtin -nostdlib -nostdinc \
+               -fno-stack-protector -m32 -Iinclude -Ikernel -Iboot -O0 -g -DDEBUG
 ASMFLAGS = -f elf32
 LDFLAGS = -T link.ld -nostdlib -m elf_i386
 
@@ -18,6 +20,9 @@ ASM_OBJECTS := $(patsubst %.asm, build/%.o, $(notdir $(ASM_SOURCES)))
 OBJECTS = $(C_OBJECTS) $(ASM_OBJECTS)
 
 all: kernel.bin
+
+debug: CFLAGS := $(CFLAGS_DEBUG)
+debug: clean kernel.bin
 
 # Сборка ASM
 build/%.o: boot/%.asm
