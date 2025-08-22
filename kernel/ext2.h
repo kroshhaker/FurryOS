@@ -45,6 +45,38 @@ typedef struct {
     uint32_t s_reserved[204];       /* Резерв */
 } __attribute__((packed)) ext2_super_block_t;
 
-void parse_superblock(uint32_t start_sb_lba, ext2_super_block_t *sb);
+typedef struct {
+    uint32_t block_bitmap;       /* Номер блока с битовой картой блоков */
+    uint32_t inode_bitmap;       /* Номер блока с битовой картой инодов */
+    uint32_t inode_table;        /* Начальный блок таблицы инодов */
+    uint16_t free_blocks_count;  /* Кол-во свободных блоков в группе */
+    uint16_t free_inodes_count;  /* Кол-во свободных инодов в группе */
+    uint16_t used_dirs_count;    /* Кол-во каталогов в группе */
+    uint8_t  reserved[14];
+} __attribute__((packed)) ext2_block_group_descriptor_t;
+
+typedef struct {
+    uint16_t mode;             /* тип файла и права доступа */
+    uint16_t uid;              /* ID пользователя (владельца) */
+    uint32_t size_low;         /* младшие 32 бита размера файла */
+    uint32_t atime;            /* время последнего доступа */
+    uint32_t ctime;            /* время создания */
+    uint32_t mtime;            /* время последнего изменения */
+    uint32_t dtime;            /* время удаления */
+    uint16_t gid;              /* ID группы */
+    uint16_t links_count;      /* число hard links */
+    uint32_t blocks;           /* число занятых секторов */
+    uint32_t flags;            /* флаги */
+    uint32_t osd1;             /* ОС-специфичное поле #1 */
+    uint32_t block[15];        /* указатели на блоки */
+    uint32_t generation;       /* generation (для NFS) */
+    uint32_t file_acl;         /* ACL или расширенные атрибуты */
+    uint32_t size_high;        /* старшие 32 бита размера / Directory ACL */
+    uint32_t fragment_addr;    /* адрес фрагмента */
+    uint8_t  osd2[12];         /* ОС-специфичное поле #2 */
+} __attribute__((packed)) ext2_inode_t;
+
+void read_superblock(uint32_t start_sb_lba, ext2_super_block_t *sb);
+void read_bg_desc (uint32_t start_block, ext2_block_group_descriptor_t *bgd);
 
 #endif

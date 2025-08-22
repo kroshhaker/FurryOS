@@ -100,8 +100,8 @@ void cmd_disk_byte(char *args) {
     }
     address[len] = '\0';
     uint32_t addr_val = hex_to_dec(address);
-    uint32_t lba = addr_val / 512;
-    uint32_t byte = addr_val % 512;
+    uint32_t lba = addr_val >> 9;
+    uint32_t byte = addr_val & 0x1FF;
     uint8_t buffer[512];
     ata_read_sector(lba, buffer);
 
